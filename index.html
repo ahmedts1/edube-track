@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة EDUBE | إدارة الحسابات</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--deep:#240033;
+--deep2:#380052;
+--purple:#65009a;
+--purple2:#a600f2;
+--violet:#c000ff;
+--white:#ffffff;
+--soft:#f6e9ff;
+--text:#ffffff;
+--ink:#2a0d37;
+--muted:#d8bee9;
+--muted2:#7b5b8d;
+--border:rgba(255,255,255,.22);
+--glass:rgba(255,255,255,.11);
+--glass2:rgba(255,255,255,.18);
+--green:#22c55e;
+--red:#ff416c;
+--yellow:#ffb703;
+--shadow:0 28px 80px rgba(39,0,60,.34);
+}
+body{
+font-family:Tahoma,Arial,sans-serif;
+min-height:100vh;
+color:var(--text);
+background:
+linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px),
+radial-gradient(circle at 88% -8%,rgba(207,0,255,.82),transparent 27%),
+radial-gradient(circle at 1% 38%,rgba(120,0,190,.45),transparent 20%),
+linear-gradient(180deg,#22002f 0,#3a0056 390px,#f7eaff 391px,#ffffff 100%);
+background-size:54px 54px,54px 54px,auto,auto,auto;
+overflow-x:hidden;
+}
+body:before,body:after{content:"";position:fixed;border-radius:50%;z-index:-1;pointer-events:none}
+body:before{width:390px;height:390px;left:-175px;top:250px;background:rgba(157,0,255,.22)}
+body:after{width:430px;height:430px;right:-145px;bottom:-95px;background:rgba(157,0,255,.14)}
+.app{display:flex;min-height:100vh}
+.sidebar{
+width:300px;position:fixed;right:0;top:0;bottom:0;height:100vh;z-index:100;
+background:linear-gradient(145deg,rgba(60,13,89,.92),rgba(169,0,244,.62));
+border-left:1px solid rgba(255,255,255,.24);border-radius:0;box-shadow:-10px 0 45px rgba(39,0,60,.22);backdrop-filter:blur(18px);padding:22px;overflow-y:auto;overflow-x:hidden
+}
+.sidebar:before{content:"";position:absolute;width:250px;height:250px;right:-95px;top:-80px;border-radius:50%;background:rgba(255,255,255,.09)}
+.logo{position:relative;text-align:center;padding:20px 10px 26px;margin-bottom:18px;border-bottom:1px solid rgba(255,255,255,.18)}
+.logo h1{font-size:46px;letter-spacing:6px;font-weight:900;line-height:1;color:#fff;text-shadow:0 12px 34px rgba(0,0,0,.18)}
+.logo p{font-size:12px;letter-spacing:4px;font-weight:bold;color:#e9d5ff;margin-top:11px}
+.logo span{display:block;font-size:18px;letter-spacing:1px;margin-top:14px;color:#fff;font-weight:900}
+.nav button{width:100%;border:none;background:rgba(255,255,255,.07);color:#fff;padding:15px 16px;border-radius:18px;font-family:inherit;font-size:15px;font-weight:bold;cursor:pointer;text-align:right;margin-bottom:10px;transition:.25s;border:1px solid rgba(255,255,255,.1)}
+.nav button:hover,.nav button.active{background:linear-gradient(90deg,#c000ff,#6c18b8);border-color:rgba(255,255,255,.35);box-shadow:0 13px 30px rgba(0,0,0,.22);color:#fff}
+.main{width:calc(100% - 300px);margin-right:300px;padding:26px 24px 46px}
+.hero{
+min-height:210px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.06));
+border:1px solid rgba(255,255,255,.24);border-radius:36px;box-shadow:var(--shadow);backdrop-filter:blur(18px);padding:30px;margin-bottom:42px;display:flex;align-items:center;justify-content:space-between;gap:22px;position:relative;overflow:hidden
+}
+.hero:before{content:"";position:absolute;width:340px;height:340px;background:rgba(177,0,255,.25);border-radius:50%;left:-120px;top:-130px}
+.hero:after{content:"EDUBE";position:absolute;left:38px;top:28px;font-size:88px;font-weight:900;letter-spacing:8px;color:rgba(255,255,255,.08);line-height:1}
+.hero h2{font-size:32px;font-weight:900;color:#fff;position:relative;margin-top:10px}
+.hero p{color:#f1dfff;margin-top:12px;font-weight:bold;position:relative;line-height:1.8;max-width:700px}
+.month-box{display:flex;gap:10px;align-items:center;position:relative;color:#fff;font-weight:bold;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:11px 14px;white-space:nowrap}
+input,select,textarea{width:100%;padding:13px 14px;border-radius:16px;border:1px solid rgba(122,24,182,.16);background:#fff;color:var(--ink);outline:none;font-family:inherit;font-size:14px;box-shadow:0 10px 25px rgba(61,0,92,.06)}
+.month-box input{background:rgba(255,255,255,.92);min-width:160px}
+input::placeholder,textarea::placeholder{color:#9a7ba9} textarea{resize:vertical;min-height:90px} select option{color:#222}
+.mobile-toggle{display:none}.btn{border:none;padding:12px 17px;border-radius:16px;font-family:inherit;font-weight:bold;cursor:pointer;color:#fff;transition:.25s;box-shadow:0 12px 25px rgba(61,0,92,.14)}.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:linear-gradient(90deg,#d100ff,#7517bc)}.btn-success{background:linear-gradient(90deg,#22c55e,#15803d)}.btn-danger{background:linear-gradient(90deg,#ff416c,#dc2626)}.btn-warning{background:linear-gradient(90deg,#ffb703,#fb8500)}
+.section{display:none}.section.active{display:block}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px}.card,.panel,.service-card{border-radius:31px;box-shadow:var(--shadow);backdrop-filter:blur(18px)}
+.card{
+background:linear-gradient(135deg,#4a0b70 0%,#7900b6 50%,#c000ff 100%);
+border:1px solid rgba(255,255,255,.24);padding:24px;min-height:150px;position:relative;overflow:hidden
+}
+.card:before{content:"";position:absolute;width:155px;height:155px;background:rgba(255,255,255,.13);border-radius:50%;left:-58px;bottom:-66px}.card:after{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.14),transparent 42%);pointer-events:none}.card h3{font-size:14px;color:#ecd7ff;margin-bottom:15px;position:relative;z-index:1}.card .value{font-size:28px;font-weight:900;color:#fff;position:relative;z-index:1}
+.panel{
+background:linear-gradient(135deg,rgba(255,255,255,.96),rgba(255,255,255,.82));
+border:1px solid rgba(122,24,182,.16);padding:24px;margin-bottom:24px;overflow:hidden;color:var(--ink)
+}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}.panel-head h2{font-size:22px;font-weight:900;color:var(--ink)}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:separate;border-spacing:0 10px;min-width:850px}th{color:#fff;background:linear-gradient(90deg,#4a0b70,#8a00c8);padding:14px;font-size:14px}td{background:#fff;padding:14px;font-size:14px;color:var(--ink);border-top:1px solid rgba(122,24,182,.12);border-bottom:1px solid rgba(122,24,182,.12)}tr td:first-child,tr th:first-child{border-radius:0 16px 16px 0}tr td:last-child,tr th:last-child{border-radius:16px 0 0 16px}
+.status{display:inline-block;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:bold}.active-status{background:#dcfce7;color:#166534;border:1px solid rgba(22,163,74,.22)}.inactive-status{background:#fee2e2;color:#991b1b;border:1px solid rgba(220,38,38,.22)}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.form-group{margin-bottom:15px}.form-group label{display:block;margin-bottom:8px;color:var(--ink);font-weight:bold;font-size:14px}.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.service-card{background:linear-gradient(135deg,#4a0b70 0%,#6f009d 50%,#b900ff 100%);border:1px solid rgba(255,255,255,.24);padding:26px;cursor:pointer;transition:.3s;position:relative;overflow:hidden;min-height:205px;color:#fff}.service-card:before{content:"▶";position:absolute;left:28px;bottom:24px;width:82px;height:82px;border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:30px;background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.25);color:#fff;transform:rotate(-3deg)}.service-card:after{content:"";position:absolute;width:210px;height:210px;border-radius:50%;right:-105px;bottom:-110px;background:rgba(255,255,255,.11)}.service-card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.42)}.service-card h3{font-size:25px;margin-bottom:12px;color:#fff;position:relative;z-index:1}.service-card p{color:#f0dfff;line-height:1.7;margin-bottom:20px;position:relative;z-index:1}.price{font-size:24px;font-weight:900;color:#fff;position:relative;z-index:1}
+.modal{position:fixed;inset:0;background:rgba(35,0,51,.62);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;backdrop-filter:blur(10px)}.modal.active{display:flex}.modal-content{width:100%;max-width:760px;max-height:90vh;overflow-y:auto;background:linear-gradient(180deg,#ffffff,#f7eaff);border:1px solid rgba(122,24,182,.18);border-radius:34px;box-shadow:0 35px 90px rgba(61,0,92,.25);padding:26px;color:var(--ink)}.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.modal-head h2{font-size:24px;color:var(--ink)}.close{width:42px;height:42px;border-radius:50%;border:1px solid rgba(122,24,182,.18);background:#fff;color:#4a0b70;font-size:24px;cursor:pointer}.toast{position:fixed;left:24px;bottom:24px;background:linear-gradient(90deg,#22c55e,#15803d);color:white;padding:15px 22px;border-radius:18px;box-shadow:var(--shadow);display:none;z-index:2000;font-weight:bold}.toast.show{display:block}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.number,.value,.money,td input[type="number"],input[type="number"]{direction:ltr;unicode-bidi:embed}.empty{padding:20px;color:var(--muted2);font-weight:bold}.db-status{font-size:12px;color:#f0dfff;margin-top:8px;font-weight:bold;position:relative}.db-status strong{color:#fff}
+@media(max-width:1100px){.cards,.services-grid,.grid-3{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}}
+@media(max-width:780px){.sidebar{right:-300px;top:0;bottom:0;transform:none;transition:.3s}.sidebar.open{right:0}.main{width:100%;margin-right:0;padding:16px}.mobile-toggle{display:inline-block}.hero{flex-direction:column;align-items:flex-start;border-radius:28px;min-height:auto}.hero:after{font-size:54px;left:20px;top:20px}.month-box{width:100%;flex-direction:column;align-items:flex-start;border-radius:22px}.month-box input{width:100%}.cards,.services-grid,.grid-3{grid-template-columns:1fr}.logo h1{font-size:34px}}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="logo"><h1>EDUBE</h1><p>MARKETING FOR TEACHERS</p><span>تسويق - تنظيم - نتائج</span></div>
+  <div class="nav">
+    <button class="active" onclick="showSection('dashboard',this)">لوحة التحكم</button>
+    <button onclick="showSection('services',this)">إدارة الخدمات</button>
+    <button onclick="showSection('sales',this)">الإيرادات / المبيعات</button>
+    <button onclick="showSection('expenses',this)">المصروفات</button>
+    <button onclick="showSection('stats',this)">إحصائيات الشهر</button>
+    <button onclick="showSection('compare',this)">مقارنة الشهور</button>
+  </div>
+</aside>
+<main class="main">
+<div class="hero">
+  <div><button class="btn btn-primary mobile-toggle" onclick="toggleSidebar()">☰ القائمة</button><h2 id="pageTitle">لوحة التحكم</h2><p>منصة إدارية لحسابات شركة تسويق تقدم خدمات تسويقية للمعلمين — خدمات، مبيعات، مصروفات وأرباح.</p><div class="db-status" id="dbStatus">قاعدة البيانات: <strong>Supabase</strong></div></div>
+  <div class="month-box"><label>اختيار الشهر</label><input type="month" id="selectedMonth" onchange="renderAll()"></div>
+</div>
+<section id="dashboard" class="section active">
+  <div class="cards"><div class="card"><h3>إجمالي الإيرادات الشهرية</h3><div class="value" id="dashRevenue">0</div></div><div class="card"><h3>إجمالي المصروفات الشهرية</h3><div class="value" id="dashExpenses">0</div></div><div class="card"><h3>صافي الربح</h3><div class="value" id="dashProfit">0</div></div><div class="card"><h3>عدد المبيعات</h3><div class="value" id="dashSalesCount">0</div></div></div>
+  <div class="panel"><div class="panel-head"><h2>آخر العمليات</h2></div><div class="table-wrap"><table><thead><tr><th>النوع</th><th>البيان</th><th>المبلغ</th><th>التاريخ</th></tr></thead><tbody id="latestOperations"></tbody></table></div></div>
+</section>
+<section id="services" class="section"><div class="panel"><div class="panel-head"><h2>إدارة الخدمات / الخدمات</h2><button class="btn btn-primary" onclick="openServiceModal()">إضافة خدمة</button></div><div class="table-wrap"><table><thead><tr><th>اسم الخدمة</th><th>الوصف</th><th>السعر</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="servicesTable"></tbody></table></div></div></section>
+<section id="sales" class="section"><div class="panel"><div class="panel-head"><h2>الخدمات المفعلة</h2><button class="btn btn-primary" onclick="openManualIncomeModal()">إضافة إيراد يدوي</button></div><div class="services-grid" id="activeServices"></div></div><div class="panel"><div class="panel-head"><h2>سجل الإيرادات / المبيعات</h2></div><div class="form-group"><label>بحث في سجل الإيرادات</label><input id="salesSearch" placeholder="ابحث باسم المعلم، الهاتف، الباكدج، نوع الإيراد، طريقة الدفع أو التاريخ" oninput="renderSales()"></div><div class="table-wrap"><table><thead><tr><th>اسم المعلم</th><th>الهاتف</th><th>المادة / التخصص</th><th>تفاصيل الإيراد</th><th>نوع الإيراد</th><th>سعر الباكدج</th><th>الخصم</th><th>المحصل</th><th>المتبقي</th><th>الدفع</th><th>التاريخ</th><th>ملاحظات</th><th>إجراءات</th></tr></thead><tbody id="salesTable"></tbody></table></div></div></section>
+<section id="expenses" class="section"><div class="grid-2"><div class="panel"><div class="panel-head"><h2>مصروفات ثابتة</h2><button class="btn btn-primary" onclick="openFixedExpenseModal()">إضافة</button></div><div class="table-wrap"><table><thead><tr><th>الاسم</th><th>التصنيف</th><th>المبلغ</th><th>إجراءات</th></tr></thead><tbody id="fixedExpensesTable"></tbody></table></div></div><div class="panel"><div class="panel-head"><h2>مصروفات غير ثابتة</h2><button class="btn btn-primary" onclick="openVariableExpenseModal()">إضافة</button></div><div class="table-wrap"><table><thead><tr><th>الاسم</th><th>التصنيف</th><th>المبلغ</th><th>التاريخ</th><th>الوصف</th><th>إجراءات</th></tr></thead><tbody id="variableExpensesTable"></tbody></table></div></div></div></section>
+<section id="stats" class="section"><div class="cards"><div class="card"><h3>إجمالي الإيرادات</h3><div class="value" id="statRevenue">0</div></div><div class="card"><h3>المصروفات الثابتة</h3><div class="value" id="statFixed">0</div></div><div class="card"><h3>المصروفات المتغيرة</h3><div class="value" id="statVariable">0</div></div><div class="card"><h3>إجمالي المصروفات</h3><div class="value" id="statExpenses">0</div></div></div><div class="grid-2"><div class="card"><h3>صافي الربح</h3><div class="value" id="statProfit">0</div></div><div class="card"><h3>أكثر كورس مبيعًا</h3><div class="value" id="topService">-</div></div></div></section>
+<section id="compare" class="section"><div class="panel"><div class="panel-head"><h2>مقارنة بين الشهور</h2></div><div class="grid-2"><div class="form-group"><label>الشهر الأول</label><input type="month" id="monthA" onchange="renderCompare()"></div><div class="form-group"><label>الشهر الثاني</label><input type="month" id="monthB" onchange="renderCompare()"></div></div></div><div class="cards"><div class="card"><h3>مقارنة الإيرادات</h3><div class="value" id="compareRevenue">0%</div></div><div class="card"><h3>مقارنة المصروفات</h3><div class="value" id="compareExpenses">0%</div></div><div class="card"><h3>مقارنة صافي الربح</h3><div class="value" id="compareProfit">0%</div></div><div class="card"><h3>الحالة</h3><div class="value" id="compareStatus">-</div></div></div></section>
+</main></div>
+<div class="modal" id="serviceModal"><div class="modal-content"><div class="modal-head"><h2 id="serviceModalTitle">إضافة خدمة</h2><button class="close" onclick="closeModal('serviceModal')">×</button></div><input type="hidden" id="serviceId"><div class="form-group"><label>اسم الخدمة / الخدمة</label><input id="serviceName"></div><div class="form-group"><label>الوصف</label><textarea id="serviceDesc"></textarea></div><div class="form-group"><label>السعر</label><input id="servicePrice" type="number"></div><div class="form-group"><label>الحالة</label><select id="serviceStatus"><option value="active">مفعلة</option><option value="inactive">غير مفعلة</option></select></div><button class="btn btn-primary" onclick="saveService()">حفظ</button></div></div>
+<div class="modal" id="saleModal"><div class="modal-content"><div class="modal-head"><h2 id="saleModalTitle">تسجيل بيع / إيراد</h2><button class="close" onclick="closeModal('saleModal')">×</button></div><input type="hidden" id="saleServiceId"><div class="grid-2"><div class="form-group"><label>اسم المعلم</label><input id="clientName"></div><div class="form-group"><label>رقم الهاتف</label><input id="clientPhone"></div><div class="form-group"><label>اسم المادة / التخصص</label><input id="clientGuardian"></div><div class="form-group"><label id="saleServiceLabel">الخدمة / تفاصيل الإيراد</label><input id="saleServiceName" disabled></div><div class="form-group" id="incomeTypeGroup"><label>نوع الإيراد</label><select id="incomeType" onchange="handleIncomeTypeChange()"><option value="full">إيراد الباكدج كامل</option><option value="advance">دفعة مقدمة</option><option value="delayed">دفعة مؤخرة</option></select></div><div class="form-group"><label id="salePriceLabel">سعر الباكدج / قيمة الإيراد</label><input id="salePrice" type="number" disabled oninput="calculateFinal()"></div><div class="form-group" id="advanceAmountGroup"><label>قيمة الدفعة المقدمة</label><input id="advanceAmount" type="number" value="0" oninput="calculateFinal()"></div><div class="form-group"><label>الخصم</label><input id="saleDiscount" type="number" value="0" oninput="calculateFinal()"></div><div class="form-group"><label>المبلغ المحصل فعليًا</label><input id="saleFinal" type="number" disabled></div><div class="form-group" id="remainingAmountGroup"><label>المبلغ المتبقي</label><input id="remainingAmount" type="number" disabled></div><div class="form-group"><label>طريقة الدفع</label><select id="paymentMethod"><option>كاش</option><option>تحويل بنكي</option><option>فودافون كاش</option><option>إنستاباي</option><option>بطاقة</option></select></div><div class="form-group"><label>التاريخ</label><input id="saleDate" type="date"></div></div><div class="form-group"><label>ملاحظات</label><textarea id="saleNotes"></textarea></div><button class="btn btn-success" onclick="saveSale()">تسجيل</button></div></div>
+<div class="modal" id="fixedExpenseModal"><div class="modal-content"><div class="modal-head"><h2>مصروف ثابت</h2><button class="close" onclick="closeModal('fixedExpenseModal')">×</button></div><input type="hidden" id="fixedId"><div class="form-group"><label>اسم المصروف</label><input id="fixedName"></div><div class="form-group"><label>التصنيف</label><select id="fixedCategory"><option>إيجار المكتب</option><option>الرواتب</option><option>اشتراكات الأدوات</option><option>أخرى</option></select></div><div class="form-group"><label>المبلغ</label><input id="fixedAmount" type="number"></div><button class="btn btn-primary" onclick="saveFixedExpense()">حفظ</button></div></div>
+<div class="modal" id="variableExpenseModal"><div class="modal-content"><div class="modal-head"><h2>مصروف غير ثابت</h2><button class="close" onclick="closeModal('variableExpenseModal')">×</button></div><input type="hidden" id="variableId"><div class="grid-2"><div class="form-group"><label>اسم المصروف</label><input id="variableName"></div><div class="form-group"><label>التصنيف</label><input id="variableCategory" placeholder="مثال: طباعة / إعلانات / معدات"></div><div class="form-group"><label>المبلغ</label><input id="variableAmount" type="number"></div><div class="form-group"><label>التاريخ</label><input id="variableDate" type="date"></div></div><div class="form-group"><label>الوصف</label><textarea id="variableDesc"></textarea></div><button class="btn btn-primary" onclick="saveVariableExpense()">حفظ</button></div></div>
+<div class="toast" id="toast">تم الحفظ بنجاح</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "PUT_SUPABASE_URL_HERE";
+const SUPABASE_ANON_KEY = "PUT_SUPABASE_ANON_KEY_HERE";
+
+const supabaseReady = SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length > 20;
+const sb = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+const KEYS={services:"edube_teacher_marketing_services_backup",sales:"edube_teacher_marketing_sales_backup",fixed:"edube_teacher_marketing_fixed_backup",variable:"edube_teacher_marketing_variable_backup"};
+
+let services=[];
+let sales=[];
+let fixedExpenses=[];
+let variableExpenses=[];
+
+const TABLES={
+  services:"services",
+  sales:"sales",
+  fixed:"fixed_expenses",
+  variable:"variable_expenses"
+};
+
+const uid=()=>crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()+Math.random().toString(16).slice(2);
+const today=()=>new Date().toISOString().slice(0,10);
+const currentMonth=()=>new Date().toISOString().slice(0,7);
+const money=n=>`${Number(n||0).toLocaleString("en-US")} EGP`;
+
+selectedMonth.value=currentMonth();
+monthA.value=currentMonth();
+monthB.value=currentMonth();
+
+function setDbStatus(text){
+  const el=document.getElementById("dbStatus");
+  if(el) el.innerHTML=`قاعدة البيانات: <strong>${text}</strong>`;
+}
+
+function backupLocal(){
+  localStorage.setItem(KEYS.services,JSON.stringify(services));
+  localStorage.setItem(KEYS.sales,JSON.stringify(sales));
+  localStorage.setItem(KEYS.fixed,JSON.stringify(fixedExpenses));
+  localStorage.setItem(KEYS.variable,JSON.stringify(variableExpenses));
+}
+
+function loadLocalBackup(){
+  services=JSON.parse(localStorage.getItem(KEYS.services))||[];
+  sales=JSON.parse(localStorage.getItem(KEYS.sales))||[];
+  fixedExpenses=JSON.parse(localStorage.getItem(KEYS.fixed))||[];
+  variableExpenses=JSON.parse(localStorage.getItem(KEYS.variable))||[];
+}
+
+async function dbSelect(table){
+  const {data,error}=await sb.from(table).select("*").order("created_at",{ascending:false});
+  if(error) throw error;
+  return data||[];
+}
+
+async function loadData(){
+  if(!supabaseReady){
+    loadLocalBackup();
+    setDbStatus("LocalStorage مؤقت — ضع بيانات Supabase أعلى الكود");
+    if(services.length===0) seedLocalData();
+    renderAll();
+    return;
+  }
+  try{
+    setDbStatus("جاري الاتصال...");
+    const [svc,sl,fx,vx]=await Promise.all([
+      dbSelect(TABLES.services),
+      dbSelect(TABLES.sales),
+      dbSelect(TABLES.fixed),
+      dbSelect(TABLES.variable)
+    ]);
+    services=svc;
+    sales=sl;
+    fixedExpenses=fx;
+    variableExpenses=vx;
+    backupLocal();
+    setDbStatus("Supabase متصل");
+    if(services.length===0 && fixedExpenses.length===0) await seedSupabaseData();
+    renderAll();
+  }catch(err){
+    console.error(err);
+    loadLocalBackup();
+    setDbStatus("فشل الاتصال — يعمل من نسخة LocalStorage");
+    renderAll();
+    toast("تعذر الاتصال بسوبا بيز");
+  }
+}
+
+async function insertRow(table,row){
+  if(!supabaseReady) return row;
+  const {data,error}=await sb.from(table).insert(row).select().single();
+  if(error) throw error;
+  return data;
+}
+
+async function updateRow(table,id,row){
+  if(!supabaseReady) return row;
+  const {data,error}=await sb.from(table).update(row).eq("id",id).select().single();
+  if(error) throw error;
+  return data;
+}
+
+async function deleteRow(table,id){
+  if(!supabaseReady) return;
+  const {error}=await sb.from(table).delete().eq("id",id);
+  if(error) throw error;
+}
+
+function toast(text="تم الحفظ بنجاح"){
+  const t=document.getElementById("toast");
+  t.textContent=text;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2200);
+}
+
+function toggleSidebar(){sidebar.classList.toggle("open")}
+function showSection(id,btn){document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");pageTitle.textContent=btn.textContent;sidebar.classList.remove("open");renderAll()}
+function openModal(id){document.getElementById(id).classList.add("active")}
+function closeModal(id){document.getElementById(id).classList.remove("active")}
+function getSelectedMonth(){return selectedMonth.value}
+function isMonth(date,month=getSelectedMonth()){return date&&date.slice(0,7)===month}
+
+function getMonthData(month){
+  const monthSales=sales.filter(s=>isMonth(s.date,month));
+  const monthVariable=variableExpenses.filter(e=>isMonth(e.date,month));
+  const revenue=monthSales.reduce((a,b)=>a+Number(b.final||0),0);
+  const fixed=fixedExpenses.reduce((a,b)=>a+Number(b.amount||0),0);
+  const variable=monthVariable.reduce((a,b)=>a+Number(b.amount||0),0);
+  const expenses=fixed+variable;
+  return{revenue,fixed,variable,expenses,profit:revenue-expenses,salesCount:monthSales.length,monthSales};
+}
+
+function openServiceModal(id=null){
+  serviceId.value="";serviceName.value="";serviceDesc.value="";servicePrice.value="";serviceStatus.value="active";serviceModalTitle.textContent="إضافة خدمة";
+  if(id){const s=services.find(x=>x.id===id);if(!s)return;serviceId.value=s.id;serviceName.value=s.name;serviceDesc.value=s.desc||"";servicePrice.value=s.price;serviceStatus.value=s.status;serviceModalTitle.textContent="تعديل خدمة"}
+  openModal("serviceModal");
+}
+
+async function saveService(){
+  const id=serviceId.value;
+  const row={name:serviceName.value.trim(),desc:serviceDesc.value.trim(),price:Number(servicePrice.value||0),status:serviceStatus.value};
+  if(!row.name||row.price<=0)return alert("من فضلك أدخل اسم الخدمة والسعر");
+  try{
+    if(id){const updated=await updateRow(TABLES.services,id,row);services=services.map(s=>s.id===id?updated:s)}
+    else{const inserted=await insertRow(TABLES.services,{id:uid(),...row});services.unshift(inserted)}
+    backupLocal();closeModal("serviceModal");toast();renderAll();
+  }catch(err){console.error(err);toast("حدث خطأ أثناء الحفظ")}
+}
+
+function renderServices(){servicesTable.innerHTML=services.map(s=>`<tr><td>${s.name}</td><td>${s.desc||"-"}</td><td>${money(s.price)}</td><td><span class="status ${s.status==="active"?"active-status":"inactive-status"}">${s.status==="active"?"مفعلة":"غير مفعلة"}</span></td><td><div class="actions"><button class="btn btn-warning" onclick="openServiceModal('${s.id}')">تعديل</button><button class="btn btn-danger delete-btn" data-type="service" data-id="${s.id}">حذف</button></div></td></tr>`).join("")||`<tr><td colspan="5">لا توجد خدمات</td></tr>`}
+function renderActiveServices(){const active=services.filter(s=>s.status==="active");activeServices.innerHTML=active.map(s=>`<div class="service-card" onclick="openSaleModal('${s.id}')"><h3>${s.name}</h3><p>${s.desc||"لا يوجد وصف"}</p><div class="price">${money(s.price)}</div></div>`).join("")||`<div class="empty">لا توجد خدمات مفعلة</div>`}
+
+function resetSaleForm(){
+  saleServiceId.value="";saleServiceName.value="";salePrice.value="";saleDiscount.value=0;saleFinal.value="";remainingAmount.value=0;advanceAmount.value=0;saleDate.value=today();clientName.value="";clientPhone.value="";clientGuardian.value="";saleNotes.value="";paymentMethod.value="كاش";incomeType.value="full";
+  incomeTypeGroup.classList.remove("hidden");advanceAmountGroup.classList.add("hidden");remainingAmountGroup.classList.add("hidden");salePriceLabel.textContent="سعر الباكدج / قيمة الإيراد";
+}
+function openSaleModal(id){
+  const s=services.find(x=>x.id===id);if(!s)return;resetSaleForm();saleModalTitle.textContent="تسجيل إيراد باكدج";saleServiceLabel.textContent="الباكدج";saleServiceId.value=s.id;saleServiceName.value=s.name;saleServiceName.disabled=true;salePrice.value=s.price;salePrice.disabled=true;saleFinal.value=s.price;incomeType.value="full";handleIncomeTypeChange();openModal("saleModal")
+}
+function openManualIncomeModal(){
+  resetSaleForm();saleModalTitle.textContent="إضافة إيراد يدوي";saleServiceLabel.textContent="تفاصيل الإيراد";saleServiceName.disabled=false;saleServiceName.placeholder="مثال: استشارة تسويقية / تصميم إضافي / دفعة مقدمة";salePrice.disabled=false;salePrice.placeholder="المبلغ";incomeType.value="manual";incomeTypeGroup.classList.add("hidden");advanceAmountGroup.classList.add("hidden");remainingAmountGroup.classList.add("hidden");calculateFinal();openModal("saleModal")
+}
+function handleIncomeTypeChange(){
+  const type=incomeType.value;
+  if(type==="advance"){
+    advanceAmountGroup.classList.remove("hidden");remainingAmountGroup.classList.remove("hidden");salePriceLabel.textContent="سعر الباكدج الكامل";saleDiscount.value=0;
+  }else{
+    advanceAmountGroup.classList.add("hidden");remainingAmountGroup.classList.add("hidden");salePriceLabel.textContent="سعر الباكدج الكامل";advanceAmount.value=0;remainingAmount.value=0;
+  }
+  calculateFinal();
+}
+function calculateFinal(){
+  const price=Number(salePrice.value||0),discount=Number(saleDiscount.value||0),advance=Number(advanceAmount.value||0);
+  if(incomeType.value==="advance"){
+    const paid=Math.max(advance,0);
+    saleFinal.value=paid;
+    remainingAmount.value=Math.max(price-discount-paid,0);
+  }else if(incomeType.value==="delayed"){
+    saleFinal.value=0;
+    remainingAmount.value=Math.max(price-discount,0);
+  }else{
+    saleFinal.value=Math.max(price-discount,0);
+    remainingAmount.value=0;
+  }
+}
+function incomeTypeLabel(type){return type==="advance"?"دفعة مقدمة":type==="delayed"?"دفعة مؤخرة":type==="manual"?"إيراد يدوي":"باكدج كامل"}
+
+async function saveSale(){
+  calculateFinal();
+  const type=incomeType.value||"manual";
+  const row={client:clientName.value.trim(),phone:clientPhone.value.trim(),guardian:clientGuardian.value.trim(),service_id:saleServiceId.value||null,service:saleServiceName.value.trim(),price:Number(salePrice.value||0),discount:Number(saleDiscount.value||0),final:Number(saleFinal.value||0),payment:paymentMethod.value,date:saleDate.value,notes:saleNotes.value.trim(),income_type:type,package_total:Number(salePrice.value||0),paid_amount:Number(saleFinal.value||0),remaining_amount:Number(remainingAmount.value||0)};
+  if(!row.client||!row.service||!row.date)return alert("من فضلك أدخل اسم المعلم وتفاصيل الإيراد والتاريخ");
+  if(type!=="delayed"&&row.final<=0)return alert("من فضلك أدخل المبلغ المحصل");
+  if(type==="delayed"&&row.remaining_amount<=0)return alert("من فضلك أدخل سعر الباكدج المؤخر");
+  try{const inserted=await insertRow(TABLES.sales,{id:uid(),...row});sales.unshift(inserted);backupLocal();closeModal("saleModal");toast("تم تسجيل الإيراد");renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء التسجيل. تأكد من تحديث جدول sales في Supabase بالأعمدة الجديدة")}
+}
+
+function renderSales(){
+const q=(document.getElementById("salesSearch")?.value||"").trim().toLowerCase();
+const filtered=sales.filter(s=>{
+  const text=[s.client,s.phone,s.guardian,s.service,incomeTypeLabel(s.income_type),s.payment,s.date,s.notes,s.package_total,s.price,s.paid_amount,s.final,s.remaining_amount].join(" ").toLowerCase();
+  return !q||text.includes(q);
+});
+salesTable.innerHTML=filtered.map(s=>`<tr><td>${s.client}</td><td>${s.phone||"-"}</td><td>${s.guardian||"-"}</td><td>${s.service||"إيراد يدوي"}</td><td>${incomeTypeLabel(s.income_type)}</td><td>${money(s.package_total||s.price)}</td><td>${money(s.discount)}</td><td>${money(s.paid_amount||s.final)}</td><td>${money(s.remaining_amount||0)}</td><td>${s.payment}</td><td>${s.date}</td><td>${s.notes||"-"}</td><td><button class="btn btn-danger delete-btn" data-type="sale" data-id="${s.id}">حذف</button></td></tr>`).join("")||`<tr><td colspan="13">لا توجد نتائج</td></tr>`}
+
+function openFixedExpenseModal(id=null){fixedId.value="";fixedName.value="";fixedCategory.value="إيجار المكتب";fixedAmount.value="";if(id){const e=fixedExpenses.find(x=>x.id===id);if(!e)return;fixedId.value=e.id;fixedName.value=e.name;fixedCategory.value=e.category;fixedAmount.value=e.amount}openModal("fixedExpenseModal")}
+async function saveFixedExpense(){const id=fixedId.value;const row={name:fixedName.value.trim(),category:fixedCategory.value,amount:Number(fixedAmount.value||0)};if(!row.name||row.amount<=0)return alert("من فضلك أدخل بيانات المصروف");try{if(id){const updated=await updateRow(TABLES.fixed,id,row);fixedExpenses=fixedExpenses.map(e=>e.id===id?updated:e)}else{const inserted=await insertRow(TABLES.fixed,{id:uid(),...row});fixedExpenses.unshift(inserted)}backupLocal();closeModal("fixedExpenseModal");toast();renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء الحفظ")}}
+function renderFixedExpenses(){fixedExpensesTable.innerHTML=fixedExpenses.map(e=>`<tr><td>${e.name}</td><td>${e.category}</td><td>${money(e.amount)}</td><td><div class="actions"><button class="btn btn-warning" onclick="openFixedExpenseModal('${e.id}')">تعديل</button><button class="btn btn-danger delete-btn" data-type="fixed" data-id="${e.id}">حذف</button></div></td></tr>`).join("")||`<tr><td colspan="4">لا توجد مصروفات ثابتة</td></tr>`}
+
+function openVariableExpenseModal(id=null){variableId.value="";variableName.value="";variableCategory.value="";variableAmount.value="";variableDate.value=today();variableDesc.value="";if(id){const e=variableExpenses.find(x=>x.id===id);if(!e)return;variableId.value=e.id;variableName.value=e.name;variableCategory.value=e.category;variableAmount.value=e.amount;variableDate.value=e.date;variableDesc.value=e.desc||""}openModal("variableExpenseModal")}
+async function saveVariableExpense(){const id=variableId.value;const row={name:variableName.value.trim(),category:variableCategory.value.trim(),amount:Number(variableAmount.value||0),date:variableDate.value,desc:variableDesc.value.trim()};if(!row.name||!row.date||row.amount<=0)return alert("من فضلك أدخل بيانات المصروف");try{if(id){const updated=await updateRow(TABLES.variable,id,row);variableExpenses=variableExpenses.map(e=>e.id===id?updated:e)}else{const inserted=await insertRow(TABLES.variable,{id:uid(),...row});variableExpenses.unshift(inserted)}backupLocal();closeModal("variableExpenseModal");toast();renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء الحفظ")}}
+function renderVariableExpenses(){variableExpensesTable.innerHTML=variableExpenses.map(e=>`<tr><td>${e.name}</td><td>${e.category||"-"}</td><td>${money(e.amount)}</td><td>${e.date}</td><td>${e.desc||"-"}</td><td><div class="actions"><button class="btn btn-warning" onclick="openVariableExpenseModal('${e.id}')">تعديل</button><button class="btn btn-danger delete-btn" data-type="variable" data-id="${e.id}">حذف</button></div></td></tr>`).join("")||`<tr><td colspan="6">لا توجد مصروفات غير ثابتة</td></tr>`}
+
+function renderDashboard(){const d=getMonthData(getSelectedMonth());dashRevenue.textContent=money(d.revenue);dashExpenses.textContent=money(d.expenses);dashProfit.textContent=money(d.profit);dashSalesCount.textContent=d.salesCount;const ops=[...sales.map(s=>({type:"إيراد",name:s.service+" - "+s.client,amount:s.final,date:s.date})),...variableExpenses.map(e=>({type:"مصروف متغير",name:e.name,amount:e.amount,date:e.date}))].filter(o=>isMonth(o.date)).sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,10);latestOperations.innerHTML=ops.map(o=>`<tr><td>${o.type}</td><td>${o.name}</td><td>${money(o.amount)}</td><td>${o.date}</td></tr>`).join("")||`<tr><td colspan="4">لا توجد عمليات</td></tr>`}
+function renderStats(){const d=getMonthData(getSelectedMonth());statRevenue.textContent=money(d.revenue);statFixed.textContent=money(d.fixed);statVariable.textContent=money(d.variable);statExpenses.textContent=money(d.expenses);statProfit.textContent=money(d.profit);const count={};d.monthSales.forEach(s=>count[s.service]=(count[s.service]||0)+1);const top=Object.entries(count).sort((a,b)=>b[1]-a[1])[0];topService.textContent=top?`${top[0]} (${top[1]})`:"-"}
+function percent(oldVal,newVal){if(oldVal===0&&newVal===0)return 0;if(oldVal===0)return 100;return ((newVal-oldVal)/oldVal*100).toFixed(1)}
+function renderCompare(){const a=getMonthData(monthA.value);const b=getMonthData(monthB.value);const r=percent(a.revenue,b.revenue);const e=percent(a.expenses,b.expenses);const p=percent(a.profit,b.profit);compareRevenue.textContent=r+"%";compareExpenses.textContent=e+"%";compareProfit.textContent=p+"%";compareStatus.textContent=p>0?"زيادة":p<0?"نقصان":"ثابت"}
+function renderAll(){renderServices();renderActiveServices();renderSales();renderFixedExpenses();renderVariableExpenses();renderDashboard();renderStats();renderCompare()}
+
+document.addEventListener("click",async function(e){const btn=e.target.closest(".delete-btn");if(!btn)return;e.stopPropagation();const id=btn.dataset.id;const type=btn.dataset.type;if(!confirm("هل تريد الحذف؟"))return;try{if(type==="service"){await deleteRow(TABLES.services,id);services=services.filter(item=>item.id!==id);toast("تم حذف الخدمة")}if(type==="sale"){await deleteRow(TABLES.sales,id);sales=sales.filter(item=>item.id!==id);toast("تم حذف الإيراد")}if(type==="fixed"){await deleteRow(TABLES.fixed,id);fixedExpenses=fixedExpenses.filter(item=>item.id!==id);toast("تم حذف المصروف الثابت")}if(type==="variable"){await deleteRow(TABLES.variable,id);variableExpenses=variableExpenses.filter(item=>item.id!==id);toast("تم حذف المصروف المتغير")}backupLocal();renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء الحذف")}});
+
+function seedLocalData(){services=[{id:uid(),name:"باكدج إدارة صفحة المعلم",desc:"إدارة محتوى ونشر وتصميمات لحسابات المعلم",price:5000,status:"active"},{id:uid(),name:"باكدج إعلانات ممولة",desc:"تجهيز وإدارة حملات إعلانية لجذب الطلاب",price:3500,status:"active"},{id:uid(),name:"باكدج فيديوهات تعليمية",desc:"مونتاج وتصميم فيديوهات قصيرة للمعلمين",price:4500,status:"active"}];fixedExpenses=[{id:uid(),name:"إيجار المكتب",category:"إيجار المكتب",amount:8000},{id:uid(),name:"رواتب الفريق",category:"الرواتب",amount:22000},{id:uid(),name:"اشتراكات الأدوات",category:"اشتراكات الأدوات",amount:2500}];backupLocal()}
+async function seedSupabaseData(){
+  try{
+    const defaultServices=[{id:uid(),name:"باكدج إدارة صفحة المعلم",desc:"إدارة محتوى ونشر وتصميمات لحسابات المعلم",price:5000,status:"active"},{id:uid(),name:"باكدج إعلانات ممولة",desc:"تجهيز وإدارة حملات إعلانية لجذب الطلاب",price:3500,status:"active"},{id:uid(),name:"باكدج فيديوهات تعليمية",desc:"مونتاج وتصميم فيديوهات قصيرة للمعلمين",price:4500,status:"active"}];
+    const defaultFixed=[{id:uid(),name:"إيجار المكتب",category:"إيجار المكتب",amount:8000},{id:uid(),name:"رواتب الفريق",category:"الرواتب",amount:22000},{id:uid(),name:"اشتراكات الأدوات",category:"اشتراكات الأدوات",amount:2500}];
+    await sb.from(TABLES.services).insert(defaultServices);
+    await sb.from(TABLES.fixed).insert(defaultFixed);
+    await loadData();
+  }catch(err){console.error(err)}
+}
+
+loadData();</script>
+</body>
+</html>
