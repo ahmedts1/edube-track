@@ -126,8 +126,8 @@ border:1px solid rgba(122,24,182,.16);padding:24px;margin-bottom:24px;overflow:h
 <div class="toast" id="toast">تم الحفظ بنجاح</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "PUT_SUPABASE_URL_HERE";
-const SUPABASE_ANON_KEY = "PUT_SUPABASE_ANON_KEY_HERE";
+const SUPABASE_URL = "https://xzljdsddyntdrphgmkyl.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh6bGpkc2RkeW50ZHJwaGdta3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNDgyODcsImV4cCI6MjA5NTkyNDI4N30.cmYJ8bnH8NXddDJRcD9l1y-q3qN70VwrDWauLf5lkQQ";
 
 const supabaseReady = SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length > 20;
 const sb = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
