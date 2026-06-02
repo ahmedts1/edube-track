@@ -89,6 +89,8 @@ border:1px solid rgba(122,24,182,.16);padding:24px;margin-bottom:24px;overflow:h
 @media(max-width:1100px){.cards,.services-grid,.grid-3{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}}
 @media(max-width:780px){.sidebar{right:-300px;top:0;bottom:0;transform:none;transition:.3s}.sidebar.open{right:0}.main{width:100%;margin-right:0;padding:16px}.mobile-toggle{display:inline-block}.hero{flex-direction:column;align-items:flex-start;border-radius:28px;min-height:auto}.hero:after{font-size:54px;left:20px;top:20px}.month-box{width:100%;flex-direction:column;align-items:flex-start;border-radius:22px}.month-box input{width:100%}.cards,.services-grid,.grid-3{grid-template-columns:1fr}.logo h1{font-size:34px}}
 .hidden{display:none!important}
+
+.filter-row{display:grid;grid-template-columns:1fr 260px;gap:14px;align-items:end;margin-bottom:16px}.mini-badge{display:inline-block;padding:7px 11px;border-radius:999px;background:#f3e8ff;color:#6b21a8;font-weight:bold;font-size:12px}.mini-badge.green{background:#dcfce7;color:#166534}.mini-badge.red{background:#fee2e2;color:#991b1b}.mini-badge.yellow{background:#fef3c7;color:#92400e}.client-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.client-summary .card{min-height:120px}@media(max-width:780px){.filter-row,.client-summary{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -101,6 +103,7 @@ border:1px solid rgba(122,24,182,.16);padding:24px;margin-bottom:24px;overflow:h
     <button onclick="showSection('sales',this)">الإيرادات / المبيعات</button>
     <button onclick="showSection('expenses',this)">المصروفات</button>
     <button onclick="showSection('stats',this)">إحصائيات الشهر</button>
+    <button onclick="showSection('clients',this)">العملاء / الأقساط</button>
     <button onclick="showSection('compare',this)">مقارنة الشهور</button>
   </div>
 </aside>
@@ -110,19 +113,23 @@ border:1px solid rgba(122,24,182,.16);padding:24px;margin-bottom:24px;overflow:h
   <div class="month-box"><label>اختيار الشهر</label><input type="month" id="selectedMonth" onchange="renderAll()"></div>
 </div>
 <section id="dashboard" class="section active">
-  <div class="cards"><div class="card"><h3>إجمالي الإيرادات الشهرية</h3><div class="value" id="dashRevenue">0</div></div><div class="card"><h3>إجمالي المصروفات الشهرية</h3><div class="value" id="dashExpenses">0</div></div><div class="card"><h3>صافي الربح</h3><div class="value" id="dashProfit">0</div></div><div class="card"><h3>عدد المبيعات</h3><div class="value" id="dashSalesCount">0</div></div></div>
+  <div class="cards"><div class="card"><h3>إجمالي الإيرادات الشهرية</h3><div class="value" id="dashRevenue">0</div></div><div class="card"><h3>إجمالي المصروفات الشهرية</h3><div class="value" id="dashExpenses">0</div></div><div class="card"><h3>صافي الربح</h3><div class="value" id="dashProfit">0</div></div><div class="card"><h3>عدد المبيعات</h3><div class="value" id="dashSalesCount">0</div></div><div class="card"><h3>إجمالي المتأخرات</h3><div class="value" id="dashRemaining">0</div></div></div>
   <div class="panel"><div class="panel-head"><h2>آخر العمليات</h2></div><div class="table-wrap"><table><thead><tr><th>النوع</th><th>البيان</th><th>المبلغ</th><th>التاريخ</th></tr></thead><tbody id="latestOperations"></tbody></table></div></div>
 </section>
 <section id="services" class="section"><div class="panel"><div class="panel-head"><h2>إدارة الخدمات / الخدمات</h2><button class="btn btn-primary" onclick="openServiceModal()">إضافة خدمة</button></div><div class="table-wrap"><table><thead><tr><th>اسم الخدمة</th><th>الوصف</th><th>السعر</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody id="servicesTable"></tbody></table></div></div></section>
-<section id="sales" class="section"><div class="panel"><div class="panel-head"><h2>الخدمات المفعلة</h2><button class="btn btn-primary" onclick="openManualIncomeModal()">إضافة إيراد يدوي</button></div><div class="services-grid" id="activeServices"></div></div><div class="panel"><div class="panel-head"><h2>سجل الإيرادات / المبيعات</h2></div><div class="form-group"><label>بحث في سجل الإيرادات</label><input id="salesSearch" placeholder="ابحث باسم المعلم، الهاتف، الباكدج، نوع الإيراد، طريقة الدفع أو التاريخ" oninput="renderSales()"></div><div class="table-wrap"><table><thead><tr><th>اسم المعلم</th><th>الهاتف</th><th>المادة / التخصص</th><th>تفاصيل الإيراد</th><th>نوع الإيراد</th><th>سعر الباكدج</th><th>الخصم</th><th>المحصل</th><th>المتبقي</th><th>الدفع</th><th>التاريخ</th><th>ملاحظات</th><th>إجراءات</th></tr></thead><tbody id="salesTable"></tbody></table></div></div></section>
+<section id="sales" class="section"><div class="panel"><div class="panel-head"><h2>الخدمات المفعلة</h2><button class="btn btn-primary" onclick="openManualIncomeModal()">إضافة إيراد يدوي</button></div><div class="services-grid" id="activeServices"></div></div><div class="panel"><div class="panel-head"><h2>سجل الإيرادات / المبيعات</h2></div><div class="filter-row"><div class="form-group"><label>بحث في سجل الإيرادات</label><input id="salesSearch" placeholder="ابحث باسم المعلم، الهاتف، الباكدج، نوع الإيراد، طريقة الدفع أو التاريخ" oninput="renderSales()"></div><div class="form-group"><label>فلترة نوع الإيراد</label><select id="incomeFilter" onchange="renderSales()"><option value="">كل الإيرادات</option><option value="full">باكدج كامل</option><option value="advance">دفعة مقدمة</option><option value="delayed">دفعة مؤخرة</option><option value="installment">قسط / دفعة لاحقة</option><option value="manual">إيراد يدوي</option></select></div></div><div class="table-wrap"><table><thead><tr><th>اسم المعلم</th><th>الهاتف</th><th>التخصص الدراسي</th><th>تفاصيل الإيراد</th><th>نوع الإيراد</th><th>سعر الباكدج</th><th>الخصم</th><th>المحصل</th><th>المتبقي</th><th>الدفع</th><th>التاريخ</th><th>ملاحظات</th><th>إجراءات</th></tr></thead><tbody id="salesTable"></tbody></table></div></div></section>
 <section id="expenses" class="section"><div class="grid-2"><div class="panel"><div class="panel-head"><h2>مصروفات ثابتة</h2><button class="btn btn-primary" onclick="openFixedExpenseModal()">إضافة</button></div><div class="table-wrap"><table><thead><tr><th>الاسم</th><th>التصنيف</th><th>المبلغ</th><th>إجراءات</th></tr></thead><tbody id="fixedExpensesTable"></tbody></table></div></div><div class="panel"><div class="panel-head"><h2>مصروفات غير ثابتة</h2><button class="btn btn-primary" onclick="openVariableExpenseModal()">إضافة</button></div><div class="table-wrap"><table><thead><tr><th>الاسم</th><th>التصنيف</th><th>المبلغ</th><th>التاريخ</th><th>الوصف</th><th>إجراءات</th></tr></thead><tbody id="variableExpensesTable"></tbody></table></div></div></div></section>
 <section id="stats" class="section"><div class="cards"><div class="card"><h3>إجمالي الإيرادات</h3><div class="value" id="statRevenue">0</div></div><div class="card"><h3>المصروفات الثابتة</h3><div class="value" id="statFixed">0</div></div><div class="card"><h3>المصروفات المتغيرة</h3><div class="value" id="statVariable">0</div></div><div class="card"><h3>إجمالي المصروفات</h3><div class="value" id="statExpenses">0</div></div></div><div class="grid-2"><div class="card"><h3>صافي الربح</h3><div class="value" id="statProfit">0</div></div><div class="card"><h3>أكثر كورس مبيعًا</h3><div class="value" id="topService">-</div></div></div></section>
+
+<section id="clients" class="section"><div class="client-summary"><div class="card"><h3>إجمالي العملاء</h3><div class="value" id="clientsCount">0</div></div><div class="card"><h3>إجمالي الباكدجات</h3><div class="value" id="clientsPackagesTotal">0</div></div><div class="card"><h3>إجمالي المدفوع</h3><div class="value" id="clientsPaidTotal">0</div></div><div class="card"><h3>إجمالي المتبقي</h3><div class="value" id="clientsRemainingTotal">0</div></div></div><div class="panel"><div class="panel-head"><h2>العملاء / متابعة الأقساط</h2></div><div class="form-group"><label>بحث في العملاء والأقساط</label><input id="clientsSearch" placeholder="ابحث باسم المعلم، الهاتف، التخصص أو الباكدج" oninput="renderClients()"></div><div class="table-wrap"><table><thead><tr><th>المعلم</th><th>الهاتف</th><th>التخصص الدراسي</th><th>الباكدج / الإيراد</th><th>إجمالي الباكدج</th><th>المدفوع</th><th>المتبقي</th><th>الحالة</th><th>آخر تعامل</th><th>إجراءات</th></tr></thead><tbody id="clientsTable"></tbody></table></div></div><div class="panel"><div class="panel-head"><h2>سجل الأقساط والدفعات اللاحقة</h2></div><div class="table-wrap"><table><thead><tr><th>المعلم</th><th>الباكدج</th><th>قيمة الدفعة</th><th>طريقة الدفع</th><th>التاريخ</th><th>ملاحظات</th></tr></thead><tbody id="paymentsTable"></tbody></table></div></div></section>
 <section id="compare" class="section"><div class="panel"><div class="panel-head"><h2>مقارنة بين الشهور</h2></div><div class="grid-2"><div class="form-group"><label>الشهر الأول</label><input type="month" id="monthA" onchange="renderCompare()"></div><div class="form-group"><label>الشهر الثاني</label><input type="month" id="monthB" onchange="renderCompare()"></div></div></div><div class="cards"><div class="card"><h3>مقارنة الإيرادات</h3><div class="value" id="compareRevenue">0%</div></div><div class="card"><h3>مقارنة المصروفات</h3><div class="value" id="compareExpenses">0%</div></div><div class="card"><h3>مقارنة صافي الربح</h3><div class="value" id="compareProfit">0%</div></div><div class="card"><h3>الحالة</h3><div class="value" id="compareStatus">-</div></div></div></section>
 </main></div>
 <div class="modal" id="serviceModal"><div class="modal-content"><div class="modal-head"><h2 id="serviceModalTitle">إضافة خدمة</h2><button class="close" onclick="closeModal('serviceModal')">×</button></div><input type="hidden" id="serviceId"><div class="form-group"><label>اسم الخدمة / الخدمة</label><input id="serviceName"></div><div class="form-group"><label>الوصف</label><textarea id="serviceDesc"></textarea></div><div class="form-group"><label>السعر</label><input id="servicePrice" type="number"></div><div class="form-group"><label>الحالة</label><select id="serviceStatus"><option value="active">مفعلة</option><option value="inactive">غير مفعلة</option></select></div><button class="btn btn-primary" onclick="saveService()">حفظ</button></div></div>
-<div class="modal" id="saleModal"><div class="modal-content"><div class="modal-head"><h2 id="saleModalTitle">تسجيل بيع / إيراد</h2><button class="close" onclick="closeModal('saleModal')">×</button></div><input type="hidden" id="saleServiceId"><div class="grid-2"><div class="form-group"><label>اسم المعلم</label><input id="clientName"></div><div class="form-group"><label>رقم الهاتف</label><input id="clientPhone"></div><div class="form-group"><label>اسم المادة / التخصص</label><input id="clientGuardian"></div><div class="form-group"><label id="saleServiceLabel">الخدمة / تفاصيل الإيراد</label><input id="saleServiceName" disabled></div><div class="form-group" id="incomeTypeGroup"><label>نوع الإيراد</label><select id="incomeType" onchange="handleIncomeTypeChange()"><option value="full">إيراد الباكدج كامل</option><option value="advance">دفعة مقدمة</option><option value="delayed">دفعة مؤخرة</option></select></div><div class="form-group"><label id="salePriceLabel">سعر الباكدج / قيمة الإيراد</label><input id="salePrice" type="number" disabled oninput="calculateFinal()"></div><div class="form-group" id="advanceAmountGroup"><label>قيمة الدفعة المقدمة</label><input id="advanceAmount" type="number" value="0" oninput="calculateFinal()"></div><div class="form-group"><label>الخصم</label><input id="saleDiscount" type="number" value="0" oninput="calculateFinal()"></div><div class="form-group"><label>المبلغ المحصل فعليًا</label><input id="saleFinal" type="number" disabled></div><div class="form-group" id="remainingAmountGroup"><label>المبلغ المتبقي</label><input id="remainingAmount" type="number" disabled></div><div class="form-group"><label>طريقة الدفع</label><select id="paymentMethod"><option>كاش</option><option>تحويل بنكي</option><option>فودافون كاش</option><option>إنستاباي</option><option>بطاقة</option></select></div><div class="form-group"><label>التاريخ</label><input id="saleDate" type="date"></div></div><div class="form-group"><label>ملاحظات</label><textarea id="saleNotes"></textarea></div><button class="btn btn-success" onclick="saveSale()">تسجيل</button></div></div>
+<div class="modal" id="saleModal"><div class="modal-content"><div class="modal-head"><h2 id="saleModalTitle">تسجيل بيع / إيراد</h2><button class="close" onclick="closeModal('saleModal')">×</button></div><input type="hidden" id="saleServiceId"><div class="grid-2"><div class="form-group"><label>اسم المعلم</label><input id="clientName"></div><div class="form-group"><label>رقم الهاتف</label><input id="clientPhone"></div><div class="form-group"><label>اسم التخصص الدراسي</label><input id="clientGuardian"></div><div class="form-group"><label id="saleServiceLabel">الخدمة / تفاصيل الإيراد</label><input id="saleServiceName" disabled></div><div class="form-group" id="incomeTypeGroup"><label>نوع الإيراد</label><select id="incomeType" onchange="handleIncomeTypeChange()"><option value="full">إيراد الباكدج كامل</option><option value="advance">دفعة مقدمة</option><option value="delayed">دفعة مؤخرة</option></select></div><div class="form-group"><label id="salePriceLabel">سعر الباكدج / قيمة الإيراد</label><input id="salePrice" type="number" disabled oninput="calculateFinal()"></div><div class="form-group" id="advanceAmountGroup"><label>قيمة الدفعة المقدمة</label><input id="advanceAmount" type="number" value="0" oninput="calculateFinal()"></div><div class="form-group"><label>الخصم</label><input id="saleDiscount" type="number" value="0" oninput="calculateFinal()"></div><div class="form-group"><label>المبلغ المحصل فعليًا</label><input id="saleFinal" type="number" disabled></div><div class="form-group" id="remainingAmountGroup"><label>المبلغ المتبقي</label><input id="remainingAmount" type="number" disabled></div><div class="form-group"><label>طريقة الدفع</label><select id="paymentMethod"><option>كاش</option><option>تحويل بنكي</option><option>فودافون كاش</option><option>إنستاباي</option><option>بطاقة</option></select></div><div class="form-group"><label>التاريخ</label><input id="saleDate" type="date"></div></div><div class="form-group"><label>ملاحظات</label><textarea id="saleNotes"></textarea></div><button class="btn btn-success" onclick="saveSale()">تسجيل</button></div></div>
 <div class="modal" id="fixedExpenseModal"><div class="modal-content"><div class="modal-head"><h2>مصروف ثابت</h2><button class="close" onclick="closeModal('fixedExpenseModal')">×</button></div><input type="hidden" id="fixedId"><div class="form-group"><label>اسم المصروف</label><input id="fixedName"></div><div class="form-group"><label>التصنيف</label><select id="fixedCategory"><option>إيجار المكتب</option><option>الرواتب</option><option>اشتراكات الأدوات</option><option>أخرى</option></select></div><div class="form-group"><label>المبلغ</label><input id="fixedAmount" type="number"></div><button class="btn btn-primary" onclick="saveFixedExpense()">حفظ</button></div></div>
 <div class="modal" id="variableExpenseModal"><div class="modal-content"><div class="modal-head"><h2>مصروف غير ثابت</h2><button class="close" onclick="closeModal('variableExpenseModal')">×</button></div><input type="hidden" id="variableId"><div class="grid-2"><div class="form-group"><label>اسم المصروف</label><input id="variableName"></div><div class="form-group"><label>التصنيف</label><input id="variableCategory" placeholder="مثال: طباعة / إعلانات / معدات"></div><div class="form-group"><label>المبلغ</label><input id="variableAmount" type="number"></div><div class="form-group"><label>التاريخ</label><input id="variableDate" type="date"></div></div><div class="form-group"><label>الوصف</label><textarea id="variableDesc"></textarea></div><button class="btn btn-primary" onclick="saveVariableExpense()">حفظ</button></div></div>
+
+<div class="modal" id="paymentModal"><div class="modal-content"><div class="modal-head"><h2>تسجيل قسط / دفعة لاحقة</h2><button class="close" onclick="closeModal('paymentModal')">×</button></div><input type="hidden" id="paymentSaleId"><div class="grid-2"><div class="form-group"><label>اسم المعلم</label><input id="paymentClient" disabled></div><div class="form-group"><label>الباكدج</label><input id="paymentService" disabled></div><div class="form-group"><label>المبلغ المتبقي الحالي</label><input id="paymentCurrentRemaining" type="number" disabled></div><div class="form-group"><label>قيمة الدفعة</label><input id="paymentAmount" type="number" oninput="calculatePaymentRemaining()"></div><div class="form-group"><label>المتبقي بعد الدفعة</label><input id="paymentAfterRemaining" type="number" disabled></div><div class="form-group"><label>طريقة الدفع</label><select id="paymentMethodInstallment"><option>كاش</option><option>تحويل بنكي</option><option>فودافون كاش</option><option>إنستاباي</option><option>بطاقة</option></select></div><div class="form-group"><label>التاريخ</label><input id="paymentDate" type="date"></div></div><div class="form-group"><label>ملاحظات</label><textarea id="paymentNotes"></textarea></div><button class="btn btn-success" onclick="savePackagePayment()">حفظ الدفعة</button></div></div>
 <div class="toast" id="toast">تم الحفظ بنجاح</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -132,231 +139,81 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const supabaseReady = SUPABASE_URL.startsWith("https://") && SUPABASE_ANON_KEY.length > 20;
 const sb = supabaseReady ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
-const KEYS={services:"edube_teacher_marketing_services_backup",sales:"edube_teacher_marketing_sales_backup",fixed:"edube_teacher_marketing_fixed_backup",variable:"edube_teacher_marketing_variable_backup"};
+const KEYS={services:"edube_teacher_marketing_services_backup",sales:"edube_teacher_marketing_sales_backup",fixed:"edube_teacher_marketing_fixed_backup",variable:"edube_teacher_marketing_variable_backup",payments:"edube_teacher_marketing_payments_backup"};
 
 let services=[];
 let sales=[];
 let fixedExpenses=[];
 let variableExpenses=[];
+let packagePayments=[];
 
-const TABLES={
-  services:"services",
-  sales:"sales",
-  fixed:"fixed_expenses",
-  variable:"variable_expenses"
-};
+const TABLES={services:"services",sales:"sales",fixed:"fixed_expenses",variable:"variable_expenses",payments:"package_payments"};
 
 const uid=()=>crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()+Math.random().toString(16).slice(2);
 const today=()=>new Date().toISOString().slice(0,10);
 const currentMonth=()=>new Date().toISOString().slice(0,7);
 const money=n=>`${Number(n||0).toLocaleString("en-US")} EGP`;
+const num=n=>Number(n||0);
 
 selectedMonth.value=currentMonth();
 monthA.value=currentMonth();
 monthB.value=currentMonth();
 
-function setDbStatus(text){
-  const el=document.getElementById("dbStatus");
-  if(el) el.innerHTML=`قاعدة البيانات: <strong>${text}</strong>`;
-}
-
-function backupLocal(){
-  localStorage.setItem(KEYS.services,JSON.stringify(services));
-  localStorage.setItem(KEYS.sales,JSON.stringify(sales));
-  localStorage.setItem(KEYS.fixed,JSON.stringify(fixedExpenses));
-  localStorage.setItem(KEYS.variable,JSON.stringify(variableExpenses));
-}
-
-function loadLocalBackup(){
-  services=JSON.parse(localStorage.getItem(KEYS.services))||[];
-  sales=JSON.parse(localStorage.getItem(KEYS.sales))||[];
-  fixedExpenses=JSON.parse(localStorage.getItem(KEYS.fixed))||[];
-  variableExpenses=JSON.parse(localStorage.getItem(KEYS.variable))||[];
-}
-
-async function dbSelect(table){
-  const {data,error}=await sb.from(table).select("*").order("created_at",{ascending:false});
-  if(error) throw error;
-  return data||[];
-}
-
-async function loadData(){
-  if(!supabaseReady){
-    loadLocalBackup();
-    setDbStatus("LocalStorage مؤقت — ضع بيانات Supabase أعلى الكود");
-    if(services.length===0) seedLocalData();
-    renderAll();
-    return;
-  }
-  try{
-    setDbStatus("جاري الاتصال...");
-    const [svc,sl,fx,vx]=await Promise.all([
-      dbSelect(TABLES.services),
-      dbSelect(TABLES.sales),
-      dbSelect(TABLES.fixed),
-      dbSelect(TABLES.variable)
-    ]);
-    services=svc;
-    sales=sl;
-    fixedExpenses=fx;
-    variableExpenses=vx;
-    backupLocal();
-    setDbStatus("Supabase متصل");
-    if(services.length===0 && fixedExpenses.length===0) await seedSupabaseData();
-    renderAll();
-  }catch(err){
-    console.error(err);
-    loadLocalBackup();
-    setDbStatus("فشل الاتصال — يعمل من نسخة LocalStorage");
-    renderAll();
-    toast("تعذر الاتصال بسوبا بيز");
-  }
-}
-
-async function insertRow(table,row){
-  if(!supabaseReady) return row;
-  const {data,error}=await sb.from(table).insert(row).select().single();
-  if(error) throw error;
-  return data;
-}
-
-async function updateRow(table,id,row){
-  if(!supabaseReady) return row;
-  const {data,error}=await sb.from(table).update(row).eq("id",id).select().single();
-  if(error) throw error;
-  return data;
-}
-
-async function deleteRow(table,id){
-  if(!supabaseReady) return;
-  const {error}=await sb.from(table).delete().eq("id",id);
-  if(error) throw error;
-}
-
-function toast(text="تم الحفظ بنجاح"){
-  const t=document.getElementById("toast");
-  t.textContent=text;
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),2200);
-}
-
+function setDbStatus(text){const el=document.getElementById("dbStatus");if(el) el.innerHTML=`قاعدة البيانات: <strong>${text}</strong>`;}
+function backupLocal(){localStorage.setItem(KEYS.services,JSON.stringify(services));localStorage.setItem(KEYS.sales,JSON.stringify(sales));localStorage.setItem(KEYS.fixed,JSON.stringify(fixedExpenses));localStorage.setItem(KEYS.variable,JSON.stringify(variableExpenses));localStorage.setItem(KEYS.payments,JSON.stringify(packagePayments));}
+function loadLocalBackup(){services=JSON.parse(localStorage.getItem(KEYS.services))||[];sales=JSON.parse(localStorage.getItem(KEYS.sales))||[];fixedExpenses=JSON.parse(localStorage.getItem(KEYS.fixed))||[];variableExpenses=JSON.parse(localStorage.getItem(KEYS.variable))||[];packagePayments=JSON.parse(localStorage.getItem(KEYS.payments))||[];}
+async function dbSelect(table){const {data,error}=await sb.from(table).select("*").order("created_at",{ascending:false});if(error) throw error;return data||[];}
+async function loadData(){if(!supabaseReady){loadLocalBackup();setDbStatus("LocalStorage مؤقت");if(services.length===0) seedLocalData();renderAll();return;}try{setDbStatus("جاري الاتصال...");const [svc,sl,fx,vx,py]=await Promise.all([dbSelect(TABLES.services),dbSelect(TABLES.sales),dbSelect(TABLES.fixed),dbSelect(TABLES.variable),dbSelect(TABLES.payments)]);services=svc;sales=sl;fixedExpenses=fx;variableExpenses=vx;packagePayments=py;backupLocal();setDbStatus("Supabase متصل");if(services.length===0 && fixedExpenses.length===0) await seedSupabaseData();renderAll();}catch(err){console.error(err);loadLocalBackup();setDbStatus("فشل الاتصال — يعمل من نسخة LocalStorage");renderAll();toast("تعذر الاتصال بسوبا بيز أو تحتاج تشغيل SQL التحديث");}}
+async function insertRow(table,row){if(!supabaseReady) return row;const {data,error}=await sb.from(table).insert(row).select().single();if(error) throw error;return data;}
+async function updateRow(table,id,row){if(!supabaseReady) return {...row,id};const {data,error}=await sb.from(table).update(row).eq("id",id).select().single();if(error) throw error;return data;}
+async function deleteRow(table,id){if(!supabaseReady) return;const {error}=await sb.from(table).delete().eq("id",id);if(error) throw error;}
+function toast(text="تم الحفظ بنجاح"){const t=document.getElementById("toast");t.textContent=text;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200);}
 function toggleSidebar(){sidebar.classList.toggle("open")}
 function showSection(id,btn){document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");pageTitle.textContent=btn.textContent;sidebar.classList.remove("open");renderAll()}
 function openModal(id){document.getElementById(id).classList.add("active")}
 function closeModal(id){document.getElementById(id).classList.remove("active")}
 function getSelectedMonth(){return selectedMonth.value}
 function isMonth(date,month=getSelectedMonth()){return date&&date.slice(0,7)===month}
-
-function getMonthData(month){
-  const monthSales=sales.filter(s=>isMonth(s.date,month));
-  const monthVariable=variableExpenses.filter(e=>isMonth(e.date,month));
-  const revenue=monthSales.reduce((a,b)=>a+Number(b.final||0),0);
-  const fixed=fixedExpenses.reduce((a,b)=>a+Number(b.amount||0),0);
-  const variable=monthVariable.reduce((a,b)=>a+Number(b.amount||0),0);
-  const expenses=fixed+variable;
-  return{revenue,fixed,variable,expenses,profit:revenue-expenses,salesCount:monthSales.length,monthSales};
-}
-
-function openServiceModal(id=null){
-  serviceId.value="";serviceName.value="";serviceDesc.value="";servicePrice.value="";serviceStatus.value="active";serviceModalTitle.textContent="إضافة خدمة";
-  if(id){const s=services.find(x=>x.id===id);if(!s)return;serviceId.value=s.id;serviceName.value=s.name;serviceDesc.value=s.desc||"";servicePrice.value=s.price;serviceStatus.value=s.status;serviceModalTitle.textContent="تعديل خدمة"}
-  openModal("serviceModal");
-}
-
-async function saveService(){
-  const id=serviceId.value;
-  const row={name:serviceName.value.trim(),desc:serviceDesc.value.trim(),price:Number(servicePrice.value||0),status:serviceStatus.value};
-  if(!row.name||row.price<=0)return alert("من فضلك أدخل اسم الخدمة والسعر");
-  try{
-    if(id){const updated=await updateRow(TABLES.services,id,row);services=services.map(s=>s.id===id?updated:s)}
-    else{const inserted=await insertRow(TABLES.services,{id:uid(),...row});services.unshift(inserted)}
-    backupLocal();closeModal("serviceModal");toast();renderAll();
-  }catch(err){console.error(err);toast("حدث خطأ أثناء الحفظ")}
-}
-
+function paymentSumForSale(saleId){return packagePayments.filter(p=>p.sale_id===saleId).reduce((a,b)=>a+num(b.amount),0)}
+function salePaidTotal(s){return num(s.paid_amount||s.final)+paymentSumForSale(s.id)}
+function saleRemaining(s){return Math.max(num(s.package_total||s.price)-num(s.discount)-salePaidTotal(s),0)}
+function saleStatus(s){const remaining=saleRemaining(s);const paid=salePaidTotal(s);if(remaining<=0) return "paid";if(paid<=0) return "pending";return "partial"}
+function statusLabel(st){return st==="paid"?"مدفوع بالكامل":st==="partial"?"مدفوع جزئيًا":"مؤجل"}
+function statusClass(st){return st==="paid"?"green":st==="partial"?"yellow":"red"}
+function paymentDateMax(s){const ps=packagePayments.filter(p=>p.sale_id===s.id).map(p=>p.date).filter(Boolean);return [s.date,...ps].filter(Boolean).sort().pop()||s.date||"-"}
+function incomeTypeLabel(type){return type==="advance"?"دفعة مقدمة":type==="delayed"?"دفعة مؤخرة":type==="manual"?"إيراد يدوي":type==="installment"?"قسط / دفعة لاحقة":"باكدج كامل"}
+function getMonthData(month){const monthSales=sales.filter(s=>isMonth(s.date,month));const monthPayments=packagePayments.filter(p=>isMonth(p.date,month));const monthVariable=variableExpenses.filter(e=>isMonth(e.date,month));const revenue=monthSales.reduce((a,b)=>a+num(b.final),0)+monthPayments.reduce((a,b)=>a+num(b.amount),0);const fixed=fixedExpenses.reduce((a,b)=>a+num(b.amount),0);const variable=monthVariable.reduce((a,b)=>a+num(b.amount),0);const expenses=fixed+variable;return{revenue,fixed,variable,expenses,profit:revenue-expenses,salesCount:monthSales.length+monthPayments.length,monthSales,monthPayments};}
+function getRemainingTotal(){return sales.reduce((sum,s)=>sum+saleRemaining(s),0)}
+function openServiceModal(id=null){serviceId.value="";serviceName.value="";serviceDesc.value="";servicePrice.value="";serviceStatus.value="active";serviceModalTitle.textContent="إضافة خدمة";if(id){const s=services.find(x=>x.id===id);if(!s)return;serviceId.value=s.id;serviceName.value=s.name;serviceDesc.value=s.desc||"";servicePrice.value=s.price;serviceStatus.value=s.status;serviceModalTitle.textContent="تعديل خدمة"}openModal("serviceModal");}
+async function saveService(){const id=serviceId.value;const row={name:serviceName.value.trim(),desc:serviceDesc.value.trim(),price:num(servicePrice.value),status:serviceStatus.value};if(!row.name||row.price<=0)return alert("من فضلك أدخل اسم الخدمة والسعر");try{if(id){const updated=await updateRow(TABLES.services,id,row);services=services.map(s=>s.id===id?updated:s)}else{const inserted=await insertRow(TABLES.services,{id:uid(),...row});services.unshift(inserted)}backupLocal();closeModal("serviceModal");toast();renderAll();}catch(err){console.error(err);toast("حدث خطأ أثناء الحفظ")}}
 function renderServices(){servicesTable.innerHTML=services.map(s=>`<tr><td>${s.name}</td><td>${s.desc||"-"}</td><td>${money(s.price)}</td><td><span class="status ${s.status==="active"?"active-status":"inactive-status"}">${s.status==="active"?"مفعلة":"غير مفعلة"}</span></td><td><div class="actions"><button class="btn btn-warning" onclick="openServiceModal('${s.id}')">تعديل</button><button class="btn btn-danger delete-btn" data-type="service" data-id="${s.id}">حذف</button></div></td></tr>`).join("")||`<tr><td colspan="5">لا توجد خدمات</td></tr>`}
 function renderActiveServices(){const active=services.filter(s=>s.status==="active");activeServices.innerHTML=active.map(s=>`<div class="service-card" onclick="openSaleModal('${s.id}')"><h3>${s.name}</h3><p>${s.desc||"لا يوجد وصف"}</p><div class="price">${money(s.price)}</div></div>`).join("")||`<div class="empty">لا توجد خدمات مفعلة</div>`}
-
-function resetSaleForm(){
-  saleServiceId.value="";saleServiceName.value="";salePrice.value="";saleDiscount.value=0;saleFinal.value="";remainingAmount.value=0;advanceAmount.value=0;saleDate.value=today();clientName.value="";clientPhone.value="";clientGuardian.value="";saleNotes.value="";paymentMethod.value="كاش";incomeType.value="full";
-  incomeTypeGroup.classList.remove("hidden");advanceAmountGroup.classList.add("hidden");remainingAmountGroup.classList.add("hidden");salePriceLabel.textContent="سعر الباكدج / قيمة الإيراد";
-}
-function openSaleModal(id){
-  const s=services.find(x=>x.id===id);if(!s)return;resetSaleForm();saleModalTitle.textContent="تسجيل إيراد باكدج";saleServiceLabel.textContent="الباكدج";saleServiceId.value=s.id;saleServiceName.value=s.name;saleServiceName.disabled=true;salePrice.value=s.price;salePrice.disabled=true;saleFinal.value=s.price;incomeType.value="full";handleIncomeTypeChange();openModal("saleModal")
-}
-function openManualIncomeModal(){
-  resetSaleForm();saleModalTitle.textContent="إضافة إيراد يدوي";saleServiceLabel.textContent="تفاصيل الإيراد";saleServiceName.disabled=false;saleServiceName.placeholder="مثال: استشارة تسويقية / تصميم إضافي / دفعة مقدمة";salePrice.disabled=false;salePrice.placeholder="المبلغ";incomeType.value="manual";incomeTypeGroup.classList.add("hidden");advanceAmountGroup.classList.add("hidden");remainingAmountGroup.classList.add("hidden");calculateFinal();openModal("saleModal")
-}
-function handleIncomeTypeChange(){
-  const type=incomeType.value;
-  if(type==="advance"){
-    advanceAmountGroup.classList.remove("hidden");remainingAmountGroup.classList.remove("hidden");salePriceLabel.textContent="سعر الباكدج الكامل";saleDiscount.value=0;
-  }else{
-    advanceAmountGroup.classList.add("hidden");remainingAmountGroup.classList.add("hidden");salePriceLabel.textContent="سعر الباكدج الكامل";advanceAmount.value=0;remainingAmount.value=0;
-  }
-  calculateFinal();
-}
-function calculateFinal(){
-  const price=Number(salePrice.value||0),discount=Number(saleDiscount.value||0),advance=Number(advanceAmount.value||0);
-  if(incomeType.value==="advance"){
-    const paid=Math.max(advance,0);
-    saleFinal.value=paid;
-    remainingAmount.value=Math.max(price-discount-paid,0);
-  }else if(incomeType.value==="delayed"){
-    saleFinal.value=0;
-    remainingAmount.value=Math.max(price-discount,0);
-  }else{
-    saleFinal.value=Math.max(price-discount,0);
-    remainingAmount.value=0;
-  }
-}
-function incomeTypeLabel(type){return type==="advance"?"دفعة مقدمة":type==="delayed"?"دفعة مؤخرة":type==="manual"?"إيراد يدوي":"باكدج كامل"}
-
-async function saveSale(){
-  calculateFinal();
-  const type=incomeType.value||"manual";
-  const row={client:clientName.value.trim(),phone:clientPhone.value.trim(),guardian:clientGuardian.value.trim(),service_id:saleServiceId.value||null,service:saleServiceName.value.trim(),price:Number(salePrice.value||0),discount:Number(saleDiscount.value||0),final:Number(saleFinal.value||0),payment:paymentMethod.value,date:saleDate.value,notes:saleNotes.value.trim(),income_type:type,package_total:Number(salePrice.value||0),paid_amount:Number(saleFinal.value||0),remaining_amount:Number(remainingAmount.value||0)};
-  if(!row.client||!row.service||!row.date)return alert("من فضلك أدخل اسم المعلم وتفاصيل الإيراد والتاريخ");
-  if(type!=="delayed"&&row.final<=0)return alert("من فضلك أدخل المبلغ المحصل");
-  if(type==="delayed"&&row.remaining_amount<=0)return alert("من فضلك أدخل سعر الباكدج المؤخر");
-  try{const inserted=await insertRow(TABLES.sales,{id:uid(),...row});sales.unshift(inserted);backupLocal();closeModal("saleModal");toast("تم تسجيل الإيراد");renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء التسجيل. تأكد من تحديث جدول sales في Supabase بالأعمدة الجديدة")}
-}
-
-function renderSales(){
-const q=(document.getElementById("salesSearch")?.value||"").trim().toLowerCase();
-const filtered=sales.filter(s=>{
-  const text=[s.client,s.phone,s.guardian,s.service,incomeTypeLabel(s.income_type),s.payment,s.date,s.notes,s.package_total,s.price,s.paid_amount,s.final,s.remaining_amount].join(" ").toLowerCase();
-  return !q||text.includes(q);
-});
-salesTable.innerHTML=filtered.map(s=>`<tr><td>${s.client}</td><td>${s.phone||"-"}</td><td>${s.guardian||"-"}</td><td>${s.service||"إيراد يدوي"}</td><td>${incomeTypeLabel(s.income_type)}</td><td>${money(s.package_total||s.price)}</td><td>${money(s.discount)}</td><td>${money(s.paid_amount||s.final)}</td><td>${money(s.remaining_amount||0)}</td><td>${s.payment}</td><td>${s.date}</td><td>${s.notes||"-"}</td><td><button class="btn btn-danger delete-btn" data-type="sale" data-id="${s.id}">حذف</button></td></tr>`).join("")||`<tr><td colspan="13">لا توجد نتائج</td></tr>`}
-
+function resetSaleForm(){saleServiceId.value="";saleServiceName.value="";salePrice.value="";saleDiscount.value=0;saleFinal.value="";remainingAmount.value=0;advanceAmount.value=0;saleDate.value=today();clientName.value="";clientPhone.value="";clientGuardian.value="";saleNotes.value="";paymentMethod.value="كاش";incomeType.value="full";incomeTypeGroup.classList.remove("hidden");advanceAmountGroup.classList.add("hidden");remainingAmountGroup.classList.add("hidden");salePriceLabel.textContent="سعر الباكدج / قيمة الإيراد";}
+function openSaleModal(id){const s=services.find(x=>x.id===id);if(!s)return;resetSaleForm();saleModalTitle.textContent="تسجيل إيراد باكدج";saleServiceLabel.textContent="الباكدج";saleServiceId.value=s.id;saleServiceName.value=s.name;saleServiceName.disabled=true;salePrice.value=s.price;salePrice.disabled=true;saleFinal.value=s.price;incomeType.value="full";handleIncomeTypeChange();openModal("saleModal")}
+function openManualIncomeModal(){resetSaleForm();saleModalTitle.textContent="إضافة إيراد يدوي";saleServiceLabel.textContent="تفاصيل الإيراد";saleServiceName.disabled=false;saleServiceName.placeholder="مثال: استشارة تسويقية / تصميم إضافي";salePrice.disabled=false;salePrice.placeholder="المبلغ";incomeType.value="manual";incomeTypeGroup.classList.add("hidden");advanceAmountGroup.classList.add("hidden");remainingAmountGroup.classList.add("hidden");calculateFinal();openModal("saleModal")}
+function handleIncomeTypeChange(){const type=incomeType.value;if(type==="advance"){advanceAmountGroup.classList.remove("hidden");remainingAmountGroup.classList.remove("hidden");salePriceLabel.textContent="سعر الباكدج الكامل";saleDiscount.value=0;}else if(type==="delayed"){advanceAmountGroup.classList.add("hidden");remainingAmountGroup.classList.remove("hidden");salePriceLabel.textContent="سعر الباكدج الكامل";advanceAmount.value=0;}else{advanceAmountGroup.classList.add("hidden");remainingAmountGroup.classList.add("hidden");salePriceLabel.textContent="سعر الباكدج الكامل";advanceAmount.value=0;remainingAmount.value=0;}calculateFinal();}
+function calculateFinal(){const price=num(salePrice.value),discount=num(saleDiscount.value),advance=num(advanceAmount.value);if(incomeType.value==="advance"){const paid=Math.max(advance,0);saleFinal.value=paid;remainingAmount.value=Math.max(price-discount-paid,0);}else if(incomeType.value==="delayed"){saleFinal.value=0;remainingAmount.value=Math.max(price-discount,0);}else{saleFinal.value=Math.max(price-discount,0);remainingAmount.value=0;}}
+async function saveSale(){calculateFinal();const type=incomeType.value||"manual";const paid=num(saleFinal.value);const remaining=num(remainingAmount.value);const row={client:clientName.value.trim(),phone:clientPhone.value.trim(),guardian:clientGuardian.value.trim(),service_id:saleServiceId.value||null,service:saleServiceName.value.trim(),price:num(salePrice.value),discount:num(saleDiscount.value),final:paid,payment:paymentMethod.value,date:saleDate.value,notes:saleNotes.value.trim(),income_type:type,package_total:num(salePrice.value),paid_amount:paid,remaining_amount:remaining,status: remaining<=0 ? "paid" : paid>0 ? "partial" : "pending"};if(!row.client||!row.service||!row.date)return alert("من فضلك أدخل اسم المعلم وتفاصيل الإيراد والتاريخ");if(type!=="delayed"&&row.final<=0)return alert("من فضلك أدخل المبلغ المحصل");if(type==="delayed"&&row.remaining_amount<=0)return alert("من فضلك أدخل سعر الباكدج المؤخر");try{const inserted=await insertRow(TABLES.sales,{id:uid(),...row});sales.unshift(inserted);backupLocal();closeModal("saleModal");toast("تم تسجيل الإيراد");renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء التسجيل. تأكد من تشغيل SQL التحديث")}}
+function renderSales(){const q=(document.getElementById("salesSearch")?.value||"").trim().toLowerCase();const filter=(document.getElementById("incomeFilter")?.value||"");const filtered=sales.filter(s=>{const type=s.income_type||"full";const text=[s.client,s.phone,s.guardian,s.service,incomeTypeLabel(type),s.payment,s.date,s.notes,s.package_total,s.price,s.paid_amount,s.final,s.remaining_amount,statusLabel(saleStatus(s))].join(" ").toLowerCase();return (!q||text.includes(q))&&(!filter||type===filter);});salesTable.innerHTML=filtered.map(s=>{const st=saleStatus(s);return `<tr><td>${s.client}</td><td>${s.phone||"-"}</td><td>${s.guardian||"-"}</td><td>${s.service||"إيراد يدوي"}</td><td>${incomeTypeLabel(s.income_type)}</td><td>${money(s.package_total||s.price)}</td><td>${money(s.discount)}</td><td>${money(salePaidTotal(s))}</td><td>${money(saleRemaining(s))}</td><td>${s.payment}</td><td>${s.date}</td><td>${s.notes||"-"}</td><td><div class="actions"><button class="btn btn-success" onclick="openPaymentModal('${s.id}')" ${saleRemaining(s)<=0?'disabled style="opacity:.45;cursor:not-allowed"':''}>قسط</button><button class="btn btn-danger delete-btn" data-type="sale" data-id="${s.id}">حذف</button></div></td></tr>`}).join("")||`<tr><td colspan="13">لا توجد نتائج</td></tr>`}
+function openPaymentModal(id){const s=sales.find(x=>x.id===id);if(!s)return;const remaining=saleRemaining(s);if(remaining<=0){toast("لا يوجد مبلغ متبقي");return;}paymentSaleId.value=s.id;paymentClient.value=s.client;paymentService.value=s.service;paymentCurrentRemaining.value=remaining;paymentAmount.value="";paymentAfterRemaining.value=remaining;paymentMethodInstallment.value="كاش";paymentDate.value=today();paymentNotes.value="";openModal("paymentModal")}
+function calculatePaymentRemaining(){paymentAfterRemaining.value=Math.max(num(paymentCurrentRemaining.value)-num(paymentAmount.value),0)}
+async function savePackagePayment(){const sale=sales.find(s=>s.id===paymentSaleId.value);if(!sale)return;const amount=num(paymentAmount.value);if(amount<=0)return alert("من فضلك أدخل قيمة الدفعة");if(amount>saleRemaining(sale))return alert("قيمة الدفعة أكبر من المبلغ المتبقي");const row={id:uid(),sale_id:sale.id,client:sale.client,service:sale.service,amount,method:paymentMethodInstallment.value,date:paymentDate.value||today(),notes:paymentNotes.value.trim()};try{const inserted=await insertRow(TABLES.payments,row);packagePayments.unshift(inserted);const remainingAfter=saleRemaining(sale)-amount;const updatedStatus=remainingAfter<=0?"paid":"partial";const updated=await updateRow(TABLES.sales,sale.id,{remaining_amount:Math.max(remainingAfter,0),status:updatedStatus});sales=sales.map(s=>s.id===sale.id?{...s,...updated,status:updatedStatus,remaining_amount:Math.max(remainingAfter,0)}:s);backupLocal();closeModal("paymentModal");toast("تم تسجيل الدفعة");renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء حفظ الدفعة. تأكد من إنشاء جدول package_payments")}}
 function openFixedExpenseModal(id=null){fixedId.value="";fixedName.value="";fixedCategory.value="إيجار المكتب";fixedAmount.value="";if(id){const e=fixedExpenses.find(x=>x.id===id);if(!e)return;fixedId.value=e.id;fixedName.value=e.name;fixedCategory.value=e.category;fixedAmount.value=e.amount}openModal("fixedExpenseModal")}
-async function saveFixedExpense(){const id=fixedId.value;const row={name:fixedName.value.trim(),category:fixedCategory.value,amount:Number(fixedAmount.value||0)};if(!row.name||row.amount<=0)return alert("من فضلك أدخل بيانات المصروف");try{if(id){const updated=await updateRow(TABLES.fixed,id,row);fixedExpenses=fixedExpenses.map(e=>e.id===id?updated:e)}else{const inserted=await insertRow(TABLES.fixed,{id:uid(),...row});fixedExpenses.unshift(inserted)}backupLocal();closeModal("fixedExpenseModal");toast();renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء الحفظ")}}
+async function saveFixedExpense(){const id=fixedId.value;const row={name:fixedName.value.trim(),category:fixedCategory.value,amount:num(fixedAmount.value)};if(!row.name||row.amount<=0)return alert("من فضلك أدخل بيانات المصروف");try{if(id){const updated=await updateRow(TABLES.fixed,id,row);fixedExpenses=fixedExpenses.map(e=>e.id===id?updated:e)}else{const inserted=await insertRow(TABLES.fixed,{id:uid(),...row});fixedExpenses.unshift(inserted)}backupLocal();closeModal("fixedExpenseModal");toast();renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء الحفظ")}}
 function renderFixedExpenses(){fixedExpensesTable.innerHTML=fixedExpenses.map(e=>`<tr><td>${e.name}</td><td>${e.category}</td><td>${money(e.amount)}</td><td><div class="actions"><button class="btn btn-warning" onclick="openFixedExpenseModal('${e.id}')">تعديل</button><button class="btn btn-danger delete-btn" data-type="fixed" data-id="${e.id}">حذف</button></div></td></tr>`).join("")||`<tr><td colspan="4">لا توجد مصروفات ثابتة</td></tr>`}
-
 function openVariableExpenseModal(id=null){variableId.value="";variableName.value="";variableCategory.value="";variableAmount.value="";variableDate.value=today();variableDesc.value="";if(id){const e=variableExpenses.find(x=>x.id===id);if(!e)return;variableId.value=e.id;variableName.value=e.name;variableCategory.value=e.category;variableAmount.value=e.amount;variableDate.value=e.date;variableDesc.value=e.desc||""}openModal("variableExpenseModal")}
-async function saveVariableExpense(){const id=variableId.value;const row={name:variableName.value.trim(),category:variableCategory.value.trim(),amount:Number(variableAmount.value||0),date:variableDate.value,desc:variableDesc.value.trim()};if(!row.name||!row.date||row.amount<=0)return alert("من فضلك أدخل بيانات المصروف");try{if(id){const updated=await updateRow(TABLES.variable,id,row);variableExpenses=variableExpenses.map(e=>e.id===id?updated:e)}else{const inserted=await insertRow(TABLES.variable,{id:uid(),...row});variableExpenses.unshift(inserted)}backupLocal();closeModal("variableExpenseModal");toast();renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء الحفظ")}}
+async function saveVariableExpense(){const id=variableId.value;const row={name:variableName.value.trim(),category:variableCategory.value.trim(),amount:num(variableAmount.value),date:variableDate.value,desc:variableDesc.value.trim()};if(!row.name||!row.date||row.amount<=0)return alert("من فضلك أدخل بيانات المصروف");try{if(id){const updated=await updateRow(TABLES.variable,id,row);variableExpenses=variableExpenses.map(e=>e.id===id?updated:e)}else{const inserted=await insertRow(TABLES.variable,{id:uid(),...row});variableExpenses.unshift(inserted)}backupLocal();closeModal("variableExpenseModal");toast();renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء الحفظ")}}
 function renderVariableExpenses(){variableExpensesTable.innerHTML=variableExpenses.map(e=>`<tr><td>${e.name}</td><td>${e.category||"-"}</td><td>${money(e.amount)}</td><td>${e.date}</td><td>${e.desc||"-"}</td><td><div class="actions"><button class="btn btn-warning" onclick="openVariableExpenseModal('${e.id}')">تعديل</button><button class="btn btn-danger delete-btn" data-type="variable" data-id="${e.id}">حذف</button></div></td></tr>`).join("")||`<tr><td colspan="6">لا توجد مصروفات غير ثابتة</td></tr>`}
-
-function renderDashboard(){const d=getMonthData(getSelectedMonth());dashRevenue.textContent=money(d.revenue);dashExpenses.textContent=money(d.expenses);dashProfit.textContent=money(d.profit);dashSalesCount.textContent=d.salesCount;const ops=[...sales.map(s=>({type:"إيراد",name:s.service+" - "+s.client,amount:s.final,date:s.date})),...variableExpenses.map(e=>({type:"مصروف متغير",name:e.name,amount:e.amount,date:e.date}))].filter(o=>isMonth(o.date)).sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,10);latestOperations.innerHTML=ops.map(o=>`<tr><td>${o.type}</td><td>${o.name}</td><td>${money(o.amount)}</td><td>${o.date}</td></tr>`).join("")||`<tr><td colspan="4">لا توجد عمليات</td></tr>`}
+function renderDashboard(){const d=getMonthData(getSelectedMonth());dashRevenue.textContent=money(d.revenue);dashExpenses.textContent=money(d.expenses);dashProfit.textContent=money(d.profit);dashSalesCount.textContent=d.salesCount;dashRemaining.textContent=money(getRemainingTotal());const ops=[...sales.map(s=>({type:"إيراد",name:s.service+" - "+s.client,amount:s.final,date:s.date})),...packagePayments.map(p=>({type:"قسط",name:p.service+" - "+p.client,amount:p.amount,date:p.date})),...variableExpenses.map(e=>({type:"مصروف متغير",name:e.name,amount:e.amount,date:e.date}))].filter(o=>isMonth(o.date)).sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,10);latestOperations.innerHTML=ops.map(o=>`<tr><td>${o.type}</td><td>${o.name}</td><td>${money(o.amount)}</td><td>${o.date}</td></tr>`).join("")||`<tr><td colspan="4">لا توجد عمليات</td></tr>`}
 function renderStats(){const d=getMonthData(getSelectedMonth());statRevenue.textContent=money(d.revenue);statFixed.textContent=money(d.fixed);statVariable.textContent=money(d.variable);statExpenses.textContent=money(d.expenses);statProfit.textContent=money(d.profit);const count={};d.monthSales.forEach(s=>count[s.service]=(count[s.service]||0)+1);const top=Object.entries(count).sort((a,b)=>b[1]-a[1])[0];topService.textContent=top?`${top[0]} (${top[1]})`:"-"}
+function renderClients(){const q=(document.getElementById("clientsSearch")?.value||"").trim().toLowerCase();let rows=sales.filter(s=>["advance","delayed","full"].includes(s.income_type||"full")).filter(s=>{const text=[s.client,s.phone,s.guardian,s.service,statusLabel(saleStatus(s)),paymentDateMax(s)].join(" ").toLowerCase();return !q||text.includes(q)});clientsCount.textContent=new Set(rows.map(s=>(s.phone||s.client))).size;clientsPackagesTotal.textContent=money(rows.reduce((a,s)=>a+num(s.package_total||s.price),0));clientsPaidTotal.textContent=money(rows.reduce((a,s)=>a+salePaidTotal(s),0));clientsRemainingTotal.textContent=money(rows.reduce((a,s)=>a+saleRemaining(s),0));clientsTable.innerHTML=rows.map(s=>{const st=saleStatus(s);return `<tr><td>${s.client}</td><td>${s.phone||"-"}</td><td>${s.guardian||"-"}</td><td>${s.service}</td><td>${money(s.package_total||s.price)}</td><td>${money(salePaidTotal(s))}</td><td>${money(saleRemaining(s))}</td><td><span class="mini-badge ${statusClass(st)}">${statusLabel(st)}</span></td><td>${paymentDateMax(s)}</td><td><button class="btn btn-success" onclick="openPaymentModal('${s.id}')" ${saleRemaining(s)<=0?'disabled style="opacity:.45;cursor:not-allowed"':''}>تسجيل قسط</button></td></tr>`}).join("")||`<tr><td colspan="10">لا توجد عملاء أو أقساط</td></tr>`;paymentsTable.innerHTML=packagePayments.map(p=>`<tr><td>${p.client}</td><td>${p.service}</td><td>${money(p.amount)}</td><td>${p.method}</td><td>${p.date}</td><td>${p.notes||"-"}</td></tr>`).join("")||`<tr><td colspan="6">لا توجد أقساط مسجلة</td></tr>`}
 function percent(oldVal,newVal){if(oldVal===0&&newVal===0)return 0;if(oldVal===0)return 100;return ((newVal-oldVal)/oldVal*100).toFixed(1)}
 function renderCompare(){const a=getMonthData(monthA.value);const b=getMonthData(monthB.value);const r=percent(a.revenue,b.revenue);const e=percent(a.expenses,b.expenses);const p=percent(a.profit,b.profit);compareRevenue.textContent=r+"%";compareExpenses.textContent=e+"%";compareProfit.textContent=p+"%";compareStatus.textContent=p>0?"زيادة":p<0?"نقصان":"ثابت"}
-function renderAll(){renderServices();renderActiveServices();renderSales();renderFixedExpenses();renderVariableExpenses();renderDashboard();renderStats();renderCompare()}
-
-document.addEventListener("click",async function(e){const btn=e.target.closest(".delete-btn");if(!btn)return;e.stopPropagation();const id=btn.dataset.id;const type=btn.dataset.type;if(!confirm("هل تريد الحذف؟"))return;try{if(type==="service"){await deleteRow(TABLES.services,id);services=services.filter(item=>item.id!==id);toast("تم حذف الخدمة")}if(type==="sale"){await deleteRow(TABLES.sales,id);sales=sales.filter(item=>item.id!==id);toast("تم حذف الإيراد")}if(type==="fixed"){await deleteRow(TABLES.fixed,id);fixedExpenses=fixedExpenses.filter(item=>item.id!==id);toast("تم حذف المصروف الثابت")}if(type==="variable"){await deleteRow(TABLES.variable,id);variableExpenses=variableExpenses.filter(item=>item.id!==id);toast("تم حذف المصروف المتغير")}backupLocal();renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء الحذف")}});
-
+function renderAll(){renderServices();renderActiveServices();renderSales();renderFixedExpenses();renderVariableExpenses();renderDashboard();renderStats();renderClients();renderCompare()}
+document.addEventListener("click",async function(e){const btn=e.target.closest(".delete-btn");if(!btn)return;e.stopPropagation();const id=btn.dataset.id;const type=btn.dataset.type;if(!confirm("هل تريد الحذف؟"))return;try{if(type==="service"){await deleteRow(TABLES.services,id);services=services.filter(item=>item.id!==id);toast("تم حذف الخدمة")}if(type==="sale"){const related=packagePayments.filter(p=>p.sale_id===id);for(const p of related){await deleteRow(TABLES.payments,p.id)}packagePayments=packagePayments.filter(p=>p.sale_id!==id);await deleteRow(TABLES.sales,id);sales=sales.filter(item=>item.id!==id);toast("تم حذف الإيراد")}if(type==="fixed"){await deleteRow(TABLES.fixed,id);fixedExpenses=fixedExpenses.filter(item=>item.id!==id);toast("تم حذف المصروف الثابت")}if(type==="variable"){await deleteRow(TABLES.variable,id);variableExpenses=variableExpenses.filter(item=>item.id!==id);toast("تم حذف المصروف المتغير")}backupLocal();renderAll()}catch(err){console.error(err);toast("حدث خطأ أثناء الحذف")}});
 function seedLocalData(){services=[{id:uid(),name:"باكدج إدارة صفحة المعلم",desc:"إدارة محتوى ونشر وتصميمات لحسابات المعلم",price:5000,status:"active"},{id:uid(),name:"باكدج إعلانات ممولة",desc:"تجهيز وإدارة حملات إعلانية لجذب الطلاب",price:3500,status:"active"},{id:uid(),name:"باكدج فيديوهات تعليمية",desc:"مونتاج وتصميم فيديوهات قصيرة للمعلمين",price:4500,status:"active"}];fixedExpenses=[{id:uid(),name:"إيجار المكتب",category:"إيجار المكتب",amount:8000},{id:uid(),name:"رواتب الفريق",category:"الرواتب",amount:22000},{id:uid(),name:"اشتراكات الأدوات",category:"اشتراكات الأدوات",amount:2500}];backupLocal()}
-async function seedSupabaseData(){
-  try{
-    const defaultServices=[{id:uid(),name:"باكدج إدارة صفحة المعلم",desc:"إدارة محتوى ونشر وتصميمات لحسابات المعلم",price:5000,status:"active"},{id:uid(),name:"باكدج إعلانات ممولة",desc:"تجهيز وإدارة حملات إعلانية لجذب الطلاب",price:3500,status:"active"},{id:uid(),name:"باكدج فيديوهات تعليمية",desc:"مونتاج وتصميم فيديوهات قصيرة للمعلمين",price:4500,status:"active"}];
-    const defaultFixed=[{id:uid(),name:"إيجار المكتب",category:"إيجار المكتب",amount:8000},{id:uid(),name:"رواتب الفريق",category:"الرواتب",amount:22000},{id:uid(),name:"اشتراكات الأدوات",category:"اشتراكات الأدوات",amount:2500}];
-    await sb.from(TABLES.services).insert(defaultServices);
-    await sb.from(TABLES.fixed).insert(defaultFixed);
-    await loadData();
-  }catch(err){console.error(err)}
-}
-
-loadData();</script>
+async function seedSupabaseData(){try{const defaultServices=[{id:uid(),name:"باكدج إدارة صفحة المعلم",desc:"إدارة محتوى ونشر وتصميمات لحسابات المعلم",price:5000,status:"active"},{id:uid(),name:"باكدج إعلانات ممولة",desc:"تجهيز وإدارة حملات إعلانية لجذب الطلاب",price:3500,status:"active"},{id:uid(),name:"باكدج فيديوهات تعليمية",desc:"مونتاج وتصميم فيديوهات قصيرة للمعلمين",price:4500,status:"active"}];const defaultFixed=[{id:uid(),name:"إيجار المكتب",category:"إيجار المكتب",amount:8000},{id:uid(),name:"رواتب الفريق",category:"الرواتب",amount:22000},{id:uid(),name:"اشتراكات الأدوات",category:"اشتراكات الأدوات",amount:2500}];await sb.from(TABLES.services).insert(defaultServices);await sb.from(TABLES.fixed).insert(defaultFixed);await loadData();}catch(err){console.error(err)}}
+loadData();
+</script>
 </body>
 </html>
